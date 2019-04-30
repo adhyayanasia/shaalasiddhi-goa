@@ -1020,31 +1020,33 @@ function getMimeType3( $filename ) {
 
 
 function deleteFile($file){
-    
-    $s3 = S3Client::factory(array(
-                'version' => 'latest',
-                'region' => 'ap-south-1',
-                'credentials' => array(
-                    'key' => AWS_KEY,
-                    'secret' => AWS_SECRET
-                )
-    ));
+   if(IS_S3 === FALSE){
+   @unlink ( $file);
+   }else{
+   $s3 = S3Client::factory(array(
+               'version' => 'latest',
+               'region' => 'ap-south-1',
+               'credentials' => array(
+                   'key' => AWS_KEY,
+                   'secret' => AWS_SECRET
+               )
+   ));
 
-    try {
+   try {
 
 // Delete a file.
-        $result = $s3->deleteObject(array(
-            'Bucket' => AWS_BUCKET,
-            'Key' => $file
-        ));
-        //echo"dada";    
-        //print_r($result);
-        return true;
-    } catch (S3Exception $e) {
-        //echo $e->getMessage() . "\n";
-        return false;
-    }
-    
+       $result = $s3->deleteObject(array(
+           'Bucket' => AWS_BUCKET,
+           'Key' => $file
+       ));
+       //echo"dada";
+       //print_r($result);
+       return true;
+   } catch (S3Exception $e) {
+       //echo $e->getMessage() . "\n";
+       return false;
+   }
+   }
 }
 
 function detailsFile($file){
@@ -1075,30 +1077,32 @@ function detailsFile($file){
 }
 /*************** create pre-signed url of aws starts******************/
 function getURL($resource){
-     
- $s3 = S3Client::factory(array(
-                'version' => 'latest',
-                'region' => 'ap-south-1',
-                'credentials' => array(
-                    'key' => AWS_KEY,
-                    'secret' => AWS_SECRET
-                )
-    ));
- 
-  try {
-        $cmd = $s3->getCommand('GetObject', [
-        'Bucket' => AWS_BUCKET,
-        'Key' => $resource
-        ]);
-        $request = $s3->createPresignedRequest($cmd,TIMESTAMP);
-        // Get the actual presigned-url
-        return $presignedUrl = (string)$request->getUri();
-  }catch (S3Exception $e) {
-        echo $e->getMessage() . "\n";
-        return false;
-  }
-  
+ if(IS_S3 === FALSE){
+  return $resource;
+ }else{
+$s3 = S3Client::factory(array(
+               'version' => 'latest',
+               'region' => 'ap-south-1',
+               'credentials' => array(
+                   'key' => AWS_KEY,
+                   'secret' => AWS_SECRET
+               )
+   ));
+
+ try {
+       $cmd = $s3->getCommand('GetObject', [
+       'Bucket' => AWS_BUCKET,
+       'Key' => $resource
+       ]);
+       $request = $s3->createPresignedRequest($cmd,TIMESTAMP);
+       // Get the actual presigned-url
+       return $presignedUrl = (string)$request->getUri();
+ }catch (S3Exception $e) {
+       echo $e->getMessage() . "\n";
+       return false;
  }
+ }
+}
 /*******************create pre-signed url of aws ends**********************/
  
 function sendEmail($fromEmail,$fromName,$toEmail,$toName,$ccEmail,$ccName,$subject,$body,$attachmentPath=array(),$inlineImage=array(),$file_path=0){
