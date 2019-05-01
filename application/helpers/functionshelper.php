@@ -1169,7 +1169,7 @@ function sendEmail($fromEmail,$fromName,$toEmail,$toName,$ccEmail,$ccName,$subje
 			
 			// Set an alternative reply-to address
 			//echo STAGING_ENVIRONMENT;
-                        if(STAGING_ENVIRONMENT==true){
+                        if(defined('STAGING_ENVIRONMENT') && STAGING_ENVIRONMENT==true){
                             
                             $ccEmail = '';
                            
