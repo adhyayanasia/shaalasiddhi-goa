@@ -5341,11 +5341,16 @@ class apiController extends controller {
             $upload_url = "" . UPLOAD_PATH . "charts/" . $assessment_id . "_" . $id_c . ".png";
         }
         file_put_contents($upload_url, $contents);
+        
+        if(IS_S3){
         upload_file($upload_url, $upload_url);
+        
         @unlink($upload_url);
         if ($_POST['type'] == "local") {
             @unlink("" . CHART_URL_GENERATE . "" . $chartname_f . "");
         }
+        }
+        
         $this->apiResult ["file"] = $chartname_f;
         $this->apiResult ["status"] = 1;
     }
