@@ -6,12 +6,12 @@
  * 
  * Reasons: Manage all global constants for project
  **/
-define("MESSAGE_GUEST",'This is a guest log-in and we have provided access to only 1 Key Performance Area for your reference.Contact School Review Programme Lead, Poonam Choksi on 9773187331 for more details. You can even email her at poonam.choksi@adhyayan.asia');
+define("MESSAGE_GUEST",'');
 
 //Please enter vrsion of AWS latest
 define("AWS_VERSION","latest");
-//Please enter vrsion of AWS Resion
-define("AWS_REGION","RESION");
+//Please enter vrsion of AWS Region
+define("AWS_REGION","REGION");
 
 if(DEVELOPMENT_ENVIRONMENT){
     //Set cookie settings variables
